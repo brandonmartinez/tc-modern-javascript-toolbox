@@ -44,7 +44,7 @@ We'll focus on project setup and structure, giving our code a place to live and 
 * Setup NPM tools and utilities required for session (gulp, webpack, etc)
 * Kick off a project.json file and get rolling into part three!
 
-### Part 2: Building the Application
+### Part 3: Building the Application
 
 Now that our project has a place to exist, it's time to start building it! We'll utilize some of the latest-and-greatest tools available in the JavaScript world, as well as work through some practical tips on how to plan for scaling to medium-and-larger-sized applications.
 
@@ -54,13 +54,13 @@ Now that our project has a place to exist, it's time to start building it! We'll
 * Get our ES6+ on with our good friend, Babel
 * Make something other than a ToDo app or contact list!
 
-### Part 3: Deploying the Application
+### Part 4: Deploying the Application
 
 We have a working app… or hopefully we do; we did spend only a couple hours building this thing. Regardless, let's deploy this to the WWW, or as you modern kids might call it, the cloud!
 
 * Build production-ready assets destined for a greater server than our laptops
 * Take those assets and deploy to Azure (or other host)
 
-### Part 4: Open Discussion
+### Part 5: Open Discussion
 
 I like to close out every session with Q&A and discussion. This is your opportunity to take what we learned together and apply it to your real world scenarios and ask questions!
