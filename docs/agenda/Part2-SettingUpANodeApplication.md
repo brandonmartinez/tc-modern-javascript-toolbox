@@ -15,3 +15,16 @@ We'll focus on project setup and structure, giving our code a place to live and 
 5. Create basic folder structure (config, docs, src)
 6. Add config/Build.js
 7. Install npm global tools we'll be using: `sudo npm install -g gulp-cli`
+
+### Notes and References
+
+Options for Free Git Repositories: 
+* [Github](https://github.com/)
+* [BitBucket](https://bitbucket.org/)
+* [VSTS](https://visualstudio.microsoft.com/team-services/)
+
+Options for IDEs/Text Editors:
+* [VS Code](https://code.visualstudio.com/)
+* [Atom](https://atom.io/)
+* [Sublime Text](https://www.sublimetext.com/)
+* [Notepad++](https://notepad-plus-plus.org/)
