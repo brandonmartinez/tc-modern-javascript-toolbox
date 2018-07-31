@@ -1,0 +1,22 @@
+{
+  "name": "tc-modern-javascript-toolbox",
+  "version": "1.0.0",
+  "description": "Sample code and notes for That Conference 2018 Precon session.",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brandonmartinez/tc-modern-javascript-toolbox.git"
+  },
+  "author": "Brandon Martinez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brandonmartinez/tc-modern-javascript-toolbox/issues"
+  },
+  "homepage": "https://github.com/brandonmartinez/tc-modern-javascript-toolbox#readme"
+}
