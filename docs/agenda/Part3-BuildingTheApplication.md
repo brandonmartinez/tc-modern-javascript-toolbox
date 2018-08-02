@@ -20,12 +20,13 @@ Now that our project has a place to exist, it's time to start building it! We'll
     2. Redux Modules: `npm install redux react-redux react-router-redux`
     3. AJAX Modules: `npm install axios`
     4. Bootstrap and Styling Modules: `npm install bootstrap`
-4. Create app.js
-5. Create API controller
-6. Create React shell
-7. Create Gulpfile.js
-8. Configure Webpack
-9. Fill in application
+4. Create app.js: `touch app.js`
+5. Create API controller: `mkdir -p src/api/controllers && touch src/api/controllers/ProductsController.js`
+6. Create React shell: `mkdir -p src/web/html && touch src/web/html/index.html && mkdir -p src/web/scripts && touch src/web/scripts/app.jsx`
+7. Create Gulpfile.js: `touch Gulpfile.js`
+8. Create webpack.js: `touch webpack.js`
+9. Create local configurations for tooling: `touch .babelrc && touch .eslintrc`
+10. Fill in application
 
 ### Notes and References
 
