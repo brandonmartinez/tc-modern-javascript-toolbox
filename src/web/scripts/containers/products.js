@@ -18,6 +18,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
     addProduct: (name, quantity) => {
         dispatch(ProductActions.addProduct(name, quantity, ownProps));
+    },
+    getProducts: () => {
+        dispatch(ProductActions.getProducts());
     }
 });
 

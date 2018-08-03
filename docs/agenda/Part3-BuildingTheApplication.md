@@ -18,9 +18,8 @@ _Note: all inline scripts available as a single bash script as `/init.sh`_
 2. Install packages for the API/Web Server: `npm install express`
 3. Install packages for the React web app:
     1. React Modules: `npm install react react-dom react-helmet react-router-dom history`
-    2. Redux Modules: `npm install redux react-redux react-router-redux@next immutability-helper`
-    3. AJAX Modules: `npm install axios`
-    4. Bootstrap and Styling Modules: `npm install jquery popper bootstrap reactstrap normalize.css`
+    2. Redux Modules: `npm install redux react-redux react-router-redux@next immutability-helper redux-thunk`
+    3. Bootstrap and Styling Modules: `npm install jquery popper bootstrap reactstrap normalize.css`
 4. Create API app:
     * Main app file: `mkdir -p src/api && touch src/api/app.js`
     * Controller: `mkdir -p src/api/controllers && touch src/api/controllers/ProductsController.js`

@@ -3,38 +3,48 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MetaContainer from '../../shared/meta.jsx';
 
-const Products = ({ products, addProduct }) => {
-    // TODO: allow the user to sort
-    const sortedProductList = products.list.sort((a, b) => {
-        const nameA = a.name.toLowerCase();
-        const nameB = b.name.toLowerCase();
+class Products extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-        if (nameA < nameB) {
-            return -1;
-        }
+    componentDidMount() {
+        this.props.getProducts();
+    }
 
-        if (nameA > nameB) {
-            return 1;
-        }
+    render() {
+        // TODO: allow the user to sort
+        const sortedProductList = this.props.products.list.sort((a, b) => {
+            const nameA = a.name.toLowerCase();
+            const nameB = b.name.toLowerCase();
 
-        return 0;
-    });
-
-    return (
-        <section id="products" >
-            <MetaContainer title={'Products'} />
-            {
-                sortedProductList.map(
-                    (product) => (
-                        <div key={'product-' + product.name}>
-                            <h1>{product.name}</h1>
-                        </div>
-                    )
-                )
+            if (nameA < nameB) {
+                return -1;
             }
-            
-        </section>
-    );
+
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            return 0;
+        });
+
+        return (
+            <section id="products" >
+                <MetaContainer title={'Products'} />
+                {
+                    sortedProductList.map(
+                        (product) => (
+                            <div key={'product-' + product.name}>
+                                <h1>{product.name}</h1>
+                            </div>
+                        )
+                    )
+                }
+
+            </section>
+        );
+    }
 };
 
 Products.propTypes = {

@@ -12,6 +12,25 @@ const products = (state = {}, action) => {
                     }
                 }
             });
+        case ProductsEnums.actions.getProductsBegin:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            };
+        case ProductsEnums.actions.getProductsSuccess:
+            return {
+                ...state,
+                loading: false,
+                list: action.payload.products
+            };
+        case ProductsEnums.actions.getProductsFailure:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload.error,
+                list: []
+            };
         default:
             return state;
     }
