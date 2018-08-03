@@ -11,7 +11,7 @@ import ProductRoutes from './routes/ProductRoutes';
 ////////////////////////////////////////////////////////////////////////////////////////
 
 // Allow the webDirectory to be specified, otherwise we assume that it's going to be in the "tmp" directory for local dev purposes
-var webDirectory = process.env.WEB_DIRECTORY || join(__dirname, '../../.tmp/web/');
+var webDirectory = process.env.WEB_DIRECTORY || join(__dirname, '../../.dist/web/');
 
 // Allow a port to be set, otherwise assume 3000 for local dev purposes
 var portNumber = process.env.PORT || 3000;
@@ -27,10 +27,11 @@ app.use(urlencoded({
 
 app.use(json());
 
-app.use('/products', ProductRoutes);
+app.use('/', express.static(webDirectory));
 
-app.use(express.static(webDirectory));
+app.use('/api/products', ProductRoutes);
 
 app.listen(portNumber, function () {
-  console.log('App started listening on port ' + portNumber + ' serving from ' + webDirectory + '!');
+  // log statement for debugging
+  console.log('App started listening on port ' + portNumber + ' serving static files from ' + webDirectory + '!');
 });
