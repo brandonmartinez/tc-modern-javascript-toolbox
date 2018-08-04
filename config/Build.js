@@ -67,10 +67,12 @@ function BuildConfig(environment) {
             'basePath': apiBasePath,
             'scripts': {
                 'cwd': apiBasePath,
-                'watch': '**/*.{js,json}'
+                'watch': '**/*.{js,json}',
+                'file': path.resolve(apiBasePath, 'app.js')
             },
             'dist': {
                 'basePath': apiDistBasePath,
+                'nodeModules': path.resolve(apiDistBasePath, 'node_modules/')
             }
         }
     };

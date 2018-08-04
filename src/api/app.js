@@ -11,7 +11,7 @@ import ProductRoutes from './routes/ProductRoutes';
 ////////////////////////////////////////////////////////////////////////////////////////
 
 // Allow the webDirectory to be specified, otherwise we assume that it's going to be in the dist development directory
-var webDirectory = process.env.WEB_DIRECTORY || join(__dirname, '../../.dist/development/web/');
+var webDirectory = process.env.WEB_DIRECTORY || join(__dirname, '../web/');
 
 // Allow a port to be set, otherwise assume 3000 for local dev purposes
 var portNumber = process.env.PORT || 3000;
