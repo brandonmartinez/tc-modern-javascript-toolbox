@@ -3,17 +3,18 @@ const path = require('path');
 /**
  * Creates a configuration object to be used in the build process
  */
-function BuildConfig() {
+function BuildConfig(environment) {
     'use strict';
 
     // Root paths
     const projectBasePath = path.resolve(__dirname, '../'),
         webBasePath = path.resolve(__dirname, '../src/web/'),
-        distBasePath = path.resolve(__dirname, '../.dist/web/'),
+        distBasePath = path.resolve(__dirname, '../.dist/' + environment + '/web/'),
         nodeModulesBasePath = path.resolve(__dirname, '../node_modules/');
 
     // Config
     const buildConfig = {
+        'environment': environment,
         'projectBasePath': projectBasePath,
         'nodemodules': nodeModulesBasePath,
         'web': {
@@ -64,4 +65,4 @@ function BuildConfig() {
     return buildConfig;
 }
 
-module.exports = new BuildConfig();
+module.exports = BuildConfig;

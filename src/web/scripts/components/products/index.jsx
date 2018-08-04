@@ -1,7 +1,11 @@
 // Dependencies
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as _ from 'lodash';
 import MetaContainer from '../../shared/meta.jsx';
+import { CardDeck } from 'reactstrap';
+import ProductCardDeck from './productCardDeck.jsx';
+import ProductForm from './productForm.jsx';
 
 class Products extends React.Component {
     constructor(props) {
@@ -13,43 +17,27 @@ class Products extends React.Component {
     }
 
     render() {
-        // TODO: allow the user to sort
-        const sortedProductList = this.props.products.list.sort((a, b) => {
-            const nameA = a.name.toLowerCase();
-            const nameB = b.name.toLowerCase();
-
-            if (nameA < nameB) {
-                return -1;
-            }
-
-            if (nameA > nameB) {
-                return 1;
-            }
-
-            return 0;
-        });
+        const sortedProductList = _.orderBy(this.props.products.list, ['name'], ['asc']);
+        const groupedProducts = _.chunk(sortedProductList, 3);
 
         return (
-            <section id="products" >
+            <React.Fragment>
                 <MetaContainer title={'Products'} />
                 {
-                    sortedProductList.map(
-                        (product) => (
-                            <div key={'product-' + product.name}>
-                                <h1>{product.name}</h1>
-                            </div>
-                        )
+                    groupedProducts.map((group) =>
+                        <ProductCardDeck key={'product-group-' + group[0].id} group={group} />
                     )
                 }
-
-            </section>
+                <ProductForm addProduct={this.props.addProduct} />
+            </React.Fragment>
         );
     }
-};
+}
 
 Products.propTypes = {
     products: PropTypes.object,
-    addProduct: PropTypes.func
+    addProduct: PropTypes.func,
+    getProducts: PropTypes.func
 };
 
 export default Products;

@@ -10,8 +10,8 @@ import ProductRoutes from './routes/ProductRoutes';
 // Configuration
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// Allow the webDirectory to be specified, otherwise we assume that it's going to be in the "tmp" directory for local dev purposes
-var webDirectory = process.env.WEB_DIRECTORY || join(__dirname, '../../.dist/web/');
+// Allow the webDirectory to be specified, otherwise we assume that it's going to be in the dist development directory
+var webDirectory = process.env.WEB_DIRECTORY || join(__dirname, '../../.dist/development/web/');
 
 // Allow a port to be set, otherwise assume 3000 for local dev purposes
 var portNumber = process.env.PORT || 3000;
@@ -33,5 +33,5 @@ app.use('/api/products', ProductRoutes);
 
 app.listen(portNumber, function () {
   // log statement for debugging
-  console.log('App started listening on port ' + portNumber + ' serving static files from ' + webDirectory + '!');
+  // console.log('App started listening on port ' + portNumber + ' serving static files from ' + webDirectory + '!');
 });

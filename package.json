@@ -61,6 +61,7 @@
     "express": "^4.16.3",
     "history": "^4.7.2",
     "jquery": "^3.3.1",
+    "lodash": "^4.17.10",
     "normalize.css": "^8.0.0",
     "popper": "^1.0.1",
     "popper.js": "^1.14.3",

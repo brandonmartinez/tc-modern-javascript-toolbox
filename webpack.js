@@ -1,13 +1,10 @@
 'use strict';
-
-// Dependencies
-const buildConfig = require('./config/Build.js');
 const webpack = require('webpack');
 
 // Shared configuration
-module.exports = (mode) => {
+module.exports = (buildConfig) => {
     return {
-        mode: mode,
+        mode: buildConfig.environment,
         entry: {
             app: buildConfig.web.scripts.file
         },
@@ -39,7 +36,7 @@ module.exports = (mode) => {
             }),
             new webpack.ProvidePlugin({}),
             new webpack.DefinePlugin({
-                IS_DEVELOPMENT: mode !== 'production'
+                IS_DEVELOPMENT: buildConfig.environment !== 'production'
             })
         ]
     };

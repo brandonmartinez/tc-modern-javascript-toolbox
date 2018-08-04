@@ -1,16 +1,16 @@
 import ProductsEnums from '../enums/products';
 
-export const addProduct = (name, quantity, ownProps) => ({
-    type: ProductsEnums.actions.addProduct,
-    name,
-    quantity,
-    ownProps
-});
+function handleErrors(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response;
+}
 
 export function getProducts() {
     return dispatch => {
         dispatch(getProductsBegin());
-        return fetch("/api/products")
+        return fetch('/api/products')
             .then(handleErrors)
             .then(res => res.json())
             .then(json => {
@@ -19,14 +19,6 @@ export function getProducts() {
             })
             .catch(error => dispatch(getProductsFailure(error)));
     };
-}
-
-// Handle HTTP errors since fetch won't.
-function handleErrors(response) {
-    if (!response.ok) {
-        throw Error(response.statusText);
-    }
-    return response;
 }
 
 export const getProductsBegin = (ownProps) => ({
@@ -44,6 +36,38 @@ export const getProductsSuccess = (products, ownProps) => ({
 
 export const getProductsFailure = (error, ownProps) => ({
     type: ProductsEnums.actions.getProductsFailure,
+    payload: {
+        error
+    },
+    ownProps
+});
+
+export function addProduct(product) {
+    return dispatch => {
+        return fetch('/api/products',
+            {
+                method: 'POST',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                redirect: 'follow',
+                referrer: 'no-referrer',
+                body: JSON.stringify(product)
+            })
+            .then(handleErrors)
+            .then(() => {
+                dispatch(getProducts());
+                return product;
+            })
+            .catch(error => dispatch(addProductFailure(error)));
+    };
+}
+
+export const addProductFailure = (error, ownProps) => ({
+    type: ProductsEnums.actions.addProductFailure,
     payload: {
         error
     },

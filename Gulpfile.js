@@ -1,11 +1,20 @@
 'use strict';
 
 ////////////////////////////////////////////////////////////////////////////////////
+// configuration
+////////////////////////////////////////////////////////////////////////////////////
+const DEV_ENV = 'development';
+const PROD_ENV = 'production';
+let environment = DEV_ENV;
+const onMac = process.platform === 'darwin';
+
+////////////////////////////////////////////////////////////////////////////////////
 // dependencies
 ////////////////////////////////////////////////////////////////////////////////////
 
 // Config
-const buildConfig = require('./config/Build.js');
+const BuildConfig = require('./config/Build.js');
+const buildConfig = BuildConfig(environment);
 
 // Gulp
 const gulp = require('gulp');
@@ -37,14 +46,6 @@ const webpackStream = require('webpack-stream');
 const sassIncludePaths = [
     //...bootstrap
 ];
-
-////////////////////////////////////////////////////////////////////////////////////
-// configuration
-////////////////////////////////////////////////////////////////////////////////////
-const DEV_ENV = 'dev';
-const PROD_ENV = 'prod';
-let env = DEV_ENV;
-const onMac = process.platform === 'darwin';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // tasks
@@ -141,7 +142,7 @@ gulp.task('scripts:lint', function () {
         .pipe(eslint())
         .pipe(eslint.format());
 
-    if (env === PROD_ENV) {
+    if (environment === PROD_ENV) {
         pipeline = pipeline.pipe(eslint.failAfterError());
     }
 
@@ -153,7 +154,7 @@ gulp.task('scripts:build', async () => {
     /////////////////////////////////////////////////////////////////////////////////////
 
     // Create the webpack script, injecting any parameters
-    const webpackScript = require('./webpack.js')('development');
+    const webpackScript = require('./webpack.js')(buildConfig);
 
     // Run gulp tasks
     /////////////////////////////////////////////////////////////////////////////////////
@@ -181,7 +182,7 @@ gulp.task('_html', (cb) => {
         }),
         plumber(),
         cachebust({
-            env: env,
+            env: environment,
             hashes: hasher.hashes,
             assetRoot: buildConfig.web.dist.basePath,
             assetURL: '/',
@@ -240,7 +241,7 @@ gulp.task('build', (cb) => {
 gulp.task('build:dev', ['build']);
 
 gulp.task('env:prod', function () {
-    env = PROD_ENV;
+    environment = PROD_ENV;
 });
 
 gulp.task('build:prod', function () {
