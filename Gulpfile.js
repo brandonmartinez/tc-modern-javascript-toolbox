@@ -14,7 +14,7 @@ const onMac = process.platform === 'darwin';
 
 // Config
 const BuildConfig = require('./config/Build.js');
-const buildConfig = BuildConfig(environment);
+let buildConfig = BuildConfig(environment);
 
 // Gulp
 const gulp = require('gulp');
@@ -182,7 +182,7 @@ gulp.task('web:scripts:build', (cb) => {
     /////////////////////////////////////////////////////////////////////////////////////
 
     // Create the webpack script, injecting any parameters
-    const webpackScript = require('./webpack.js')(buildConfig);
+    const webpackScript = require('./webpack.' + environment + '.js')(buildConfig);
 
     // Run gulp tasks
     /////////////////////////////////////////////////////////////////////////////////////
@@ -317,8 +317,10 @@ gulp.task('api:watch', ['api:watch:scripts']);
 // other tasks
 ////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('env:prod', async () => {
+gulp.task('env:production', async () => {
     environment = PROD_ENV;
+    // reload config since our default is dev
+    buildConfig = BuildConfig(environment);
 });
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -336,13 +338,13 @@ gulp.task('api:build', (cb) => {
 
 gulp.task('build', ['web:build', 'api:build']);
 
-gulp.task('build:dev', ['build']);
+gulp.task('build:development', ['build']);
 
-gulp.task('build:prod', (cb) => {
-    run('env:prod', 'build', cb);
+gulp.task('build:production', (cb) => {
+    run('env:production', 'build', cb);
 });
 
-gulp.task('default', ['build:dev']);
+gulp.task('default', ['build:production']);
 
 ////////////////////////////////////////////////////////////////////////////////////
 // local dev tasks
