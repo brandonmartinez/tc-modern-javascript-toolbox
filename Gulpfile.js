@@ -183,7 +183,7 @@ gulp.task('web:scripts:build', (cb) => {
         hasher()
     ];
 
-    pump(tasks);
+    pump(tasks, cb);
 });
 
 gulp.task('web:scripts', (cb) => {
@@ -211,7 +211,7 @@ gulp.task('web:html', (cb) => {
     pump(tasks, cb);
 });
 
-gulp.task('web:watch', function () {
+gulp.task('web:watch', async () => {
     gulp.watch(buildConfig.web.scripts.watch, {
         cwd: buildConfig.web.scripts.cwd,
         verbose: true
@@ -272,7 +272,7 @@ gulp.task('api:scripts', (cb) => {
 // other tasks
 ////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('env:prod', function () {
+gulp.task('env:prod', async () => {
     environment = PROD_ENV;
 });
 
@@ -293,8 +293,8 @@ gulp.task('build', ['web:build', 'api:build']);
 
 gulp.task('build:dev', ['build']);
 
-gulp.task('build:prod', function () {
-    run('env:prod', 'build');
+gulp.task('build:prod', (cb) => {
+    run('env:prod', 'build', cb);
 });
 
 gulp.task('default', ['build:dev']);
@@ -315,6 +315,6 @@ gulp.task('live-server', function () {
     server.start();
 });
 
-gulp.task('serve', function () {
-    run('build', ['live-server']);
+gulp.task('serve', function (cb) {
+    run('build', ['live-server'], cb);
 });
