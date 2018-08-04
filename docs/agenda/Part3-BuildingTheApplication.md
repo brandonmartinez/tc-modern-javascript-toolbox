@@ -13,7 +13,7 @@ Now that our project has a place to exist, it's time to start building it! We'll
     2. ESLint Modules: `npm install -D eslint eslint-config-defaults eslint-plugin-json eslint-plugin-react`
     3. Babel modules: `npm install -D babel-cli babel-core babel-eslint babel-loader babel-plugin-transform-object-rest-spread babel-preset-env babel-preset-react`
     4. Webpack Modules: `npm install -D expose-loader imports-loader uglifyjs-webpack-plugin webpack webpack-merge webpack-stream`
-    5. Gulp modules: `npm install -D gulp gulp-cache-buster gulp-clean gulp-concat gulp-eslint gulp-hasher gulp-plumber gulp-postcss gulp-rename gulp-sass gulp-sourcemaps gulp-babel gulp-live-server gulp-watch gulp-stats pump run-sequence copy-node-modules`
+    5. Gulp modules: `npm install -D gulp gulp-cache-buster gulp-clean gulp-concat gulp-eslint gulp-hasher gulp-plumber gulp-postcss gulp-rename gulp-sass gulp-sourcemaps gulp-babel gulp-live-server gulp-watch gulp-stats gulp-preprocess pump run-sequence copy-node-modules`
 2. Install packages for the API/Web Server (the only true "dependency"): `npm install express body-parser`
 3. Install packages for the React web app:
     1. React Modules: `npm install -D react react-dom react-helmet react-router-dom history`

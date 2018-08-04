@@ -20,6 +20,9 @@ var portNumber = process.env.PORT || 3000;
 ////////////////////////////////////////////////////////////////////////////////////////
 var app = module.exports = express();
 
+// Middleware
+//////////////////////////////////
+
 // Configure body parsing
 app.use(urlencoded({
   extended: false
@@ -27,8 +30,12 @@ app.use(urlencoded({
 
 app.use(json());
 
+ // Static Site
+ //////////////////////////////////
 app.use('/', express.static(webDirectory));
 
+// API Routes
+//////////////////////////////////
 app.use('/api/products', ProductRoutes);
 
 app.listen(portNumber, function () {

@@ -30,6 +30,7 @@ const clean = require('gulp-clean');
 
 const hasher = require('gulp-hasher');
 const cachebust = require('gulp-cache-buster');
+const preprocess = require("gulp-preprocess");
 
 const sourcemaps = require('gulp-sourcemaps');
 
@@ -214,6 +215,9 @@ gulp.task('web:html', (cb) => {
             assetURL: '/',
             tokenRegExp: /ASSET{(.*?)}/g,
             hashLength: 8
+        }),
+        preprocess({
+            NODE_ENV: environment
         }),
         gulp.dest(buildConfig.web.dist.html)
     ];
