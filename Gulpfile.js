@@ -250,19 +250,6 @@ gulp.task('api:scripts:build', (cb) => {
 });
 
 gulp.task('api:scripts:nodemodules', async () => {
-    // const tasks = [
-    //     gulp.src(npmDist({
-    //         excludes: [],
-    //         replaceDefaultExcludes: true,
-    //         copyUnminified: true
-    //     }), {
-    //             base: './node_modules'
-    //         }),
-    //     plumber(),
-    //     gulp.dest(buildConfig.api.dist.nodeModules)
-    // ];
-
-    // pump(tasks, cb);
     copyNodeModules(buildConfig.projectBasePath, buildConfig.api.dist.basePath, { devDependencies: false }, function (err, results) {
         if (err) {
             console.error(err);
