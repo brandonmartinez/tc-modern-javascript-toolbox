@@ -1,18 +1,11 @@
 'use strict';
 
 ////////////////////////////////////////////////////////////////////////////////////
-// configuration
-////////////////////////////////////////////////////////////////////////////////////
-const DEV_ENV = 'development';
-const PROD_ENV = 'production';
-let environment = DEV_ENV;
-const onMac = process.platform === 'darwin';
-
-////////////////////////////////////////////////////////////////////////////////////
 // dependencies
 ////////////////////////////////////////////////////////////////////////////////////
 
 // Config
+const environment = process.env.NODE_ENV || 'development';
 const BuildConfig = require('./config/Build.js');
 let buildConfig = BuildConfig(environment);
 
@@ -80,7 +73,7 @@ const lintingFunc = (watchExpression, cwd) => {
             .pipe(eslint())
             .pipe(eslint.format());
 
-        if (environment === PROD_ENV) {
+        if (environment === 'production') {
             pipeline = pipeline.pipe(eslint.failAfterError());
         }
 
@@ -318,9 +311,9 @@ gulp.task('api:watch', ['api:watch:scripts']);
 ////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('env:production', async () => {
-    environment = PROD_ENV;
+    process.env.NODE_ENV = 'production';
     // reload config since our default is dev
-    buildConfig = BuildConfig(environment);
+    buildConfig = BuildConfig(process.env.NODE_ENV);
 });
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -351,16 +344,16 @@ gulp.task('default', ['build:production']);
 ////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('live-server', function () {
-    const server = gls.new(
-        ['--harmony', buildConfig.api.dist.basePath + '/app.js'],
-        {
-            cwd: buildConfig.api.dist.basePath,
-            env: {
-                NODE_ENV: environment
-            }
-        }, 35729);
+    process.env.WEB_DIRECTORY = buildConfig.web.dist.basePath;
+    process.env.PORT = 3000;
 
-        server.start();
+    const serverOptions = {
+        cwd: buildConfig.api.dist.basePath
+    };
+    serverOptions.env = process.env;
+
+    const server = gls(['--harmony', buildConfig.api.dist.basePath + '/app.js'], serverOptions, 35729);
+    server.start();
 
     // Watch for any .dist files changing, this means we need to reload
     gulp.watch(['**/*'], {cwd: buildConfig.web.dist.basePath}, function (file) {
