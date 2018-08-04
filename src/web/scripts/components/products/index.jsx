@@ -29,6 +29,7 @@ class Products extends React.Component {
                         <ProductForm addProduct={this.props.addProduct} />
                     </Col>
                     <Col md="8">
+                        <h1>Current Products</h1>
                         {
                             groupedProducts.map((group) =>
                                 <ProductCardDeck key={'product-group-' + group[0].id} group={group} />
