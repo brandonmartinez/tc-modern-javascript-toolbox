@@ -20,7 +20,7 @@ const ProductCardDeck = ({ group }) => (
 
 // Todo: fill in proper shape
 ProductCardDeck.propTypes = {
-    group: PropTypes.object
+    group: PropTypes.array
 };
 
 export default ProductCardDeck;

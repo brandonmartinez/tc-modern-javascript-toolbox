@@ -22,6 +22,7 @@ require('gulp-stats')(gulp);
 const plumber = require('gulp-plumber');
 const pump = require('pump');
 const run = require('run-sequence');
+const watch = require('gulp-watch');
 
 // Gulp Plugins
 const rename = require('gulp-rename');
@@ -85,6 +86,15 @@ const lintingFunc = (watchExpression, cwd) => {
         return pipeline;
     };
 }
+
+const watchDirectory = (watchPattern, cwd, onChangeFunc) => {
+    return () => {
+        watch(watchPattern, {
+            cwd: cwd,
+            verbose: true,
+        }).on('change', onChangeFunc);
+    }
+};
 
 ////////////////////////////////////////////////////////////////////////////////////
 // web app tasks
@@ -211,23 +221,6 @@ gulp.task('web:html', (cb) => {
     pump(tasks, cb);
 });
 
-gulp.task('web:watch', async () => {
-    gulp.watch(buildConfig.web.scripts.watch, {
-        cwd: buildConfig.web.scripts.cwd,
-        verbose: true
-    }, ['web:scripts']);
-
-    gulp.watch(buildConfig.web.styles.watch, {
-        cwd: buildConfig.web.styles.cwd,
-        verbose: true
-    }, ['web:styles']);
-
-    gulp.watch(buildConfig.web.images.watch, {
-        cwd: buildConfig.web.images.cwd,
-        verbose: true
-    }, ['web:images']);
-});
-
 ////////////////////////////////////////////////////////////////////////////////////
 // api app tasks
 ////////////////////////////////////////////////////////////////////////////////////
@@ -259,7 +252,57 @@ gulp.task('api:scripts:nodemodules', async () => {
 });
 
 gulp.task('api:scripts', (cb) => {
-    run(['api:scripts:build', 'api:scripts:nodemodules'], cb);
+    run(['api:scripts:lint', 'api:scripts:build', 'api:scripts:nodemodules'], cb);
+});
+
+////////////////////////////////////////////////////////////////////////////////////
+// watcher tasks
+////////////////////////////////////////////////////////////////////////////////////
+gulp.task(
+    'web:watch:scripts',
+    watchDirectory(
+        buildConfig.web.scripts.watch,
+        buildConfig.web.scripts.cwd,
+        () => run('web:scripts:build')
+    )
+);
+
+gulp.task(
+    'web:watch:images',
+    watchDirectory(
+        buildConfig.web.images.watch,
+        buildConfig.web.images.cwd,
+        () => run('web:images')
+    )
+);
+
+gulp.task(
+    'web:watch:styles',
+    watchDirectory(
+        buildConfig.web.styles.watch,
+        buildConfig.web.styles.cwd,
+        () => run('web:styles')
+    )
+);
+
+gulp.task(
+    'web:watch:html',
+    watchDirectory(
+        buildConfig.web.html.watch,
+        buildConfig.web.html.cwd,
+        // if we change html, we have to run an entire build do to hashing/cachebusting
+        () => run('web:build')
+    )
+);
+
+gulp.task('web:watch', ['web:watch:scripts', 'web:watch:styles', 'web:watch:images', 'web:watch:html']);
+
+gulp.task('api:watch', function () {
+    gulp.watch(buildConfig.api.scripts.watch, {
+        cwd: buildConfig.api.scripts.cwd,
+        ignoreInitial: true,
+        verbose: true
+    }, ['api:scripts:lint', 'api:scripts:build']).pipe(plumber());
 });
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -307,8 +350,21 @@ gulp.task('live-server', function () {
             }
         });
     server.start();
+
+    // Watch for any .dist files changing, this means we need to reload
+    console.log('Watching', buildConfig.api.dist.basePath);
+    gulp.watch(
+        ['**/*'],
+        {
+            cwd: buildConfig.distBasePath,
+            verbose: true,
+        },
+        (file) => {
+            server.notify.apply(server, [file]);
+        }
+    );
 });
 
 gulp.task('serve', function (cb) {
-    run('build', ['live-server'], cb);
+    run('build', ['web:watch', 'api:watch', 'live-server'], cb);
 });

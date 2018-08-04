@@ -20,6 +20,7 @@ function BuildConfig(environment) {
         'environment': environment,
         'projectBasePath': projectBasePath,
         'nodemodules': nodeModulesBasePath,
+        'distBasePath': distBasePath,
         'web': {
             'basePath': webBasePath,
             'fonts': {
