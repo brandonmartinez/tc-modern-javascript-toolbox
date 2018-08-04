@@ -2,8 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Card, CardHeader, CardText, CardBody,
-    CardTitle, Button
+    Card, CardHeader, CardText, CardBody, CardTitle
 } from 'reactstrap';
 
 // Containers and Components
@@ -16,7 +15,6 @@ const Product = ({ product }) => (
         <CardBody>
             <CardTitle>${product.price} <small className="text-muted">/ mo</small></CardTitle>
             <CardText>{product.description}</CardText>
-            <Button className="btn-lg btn-block">Sign up for free</Button>
         </CardBody>
     </Card>
 );
