@@ -40,7 +40,7 @@ const eslint = require('gulp-eslint');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 const babel = require('gulp-babel');
-const npmDist = require('gulp-npm-dist')
+const copyNodeModules = require('copy-node-modules')
 
 const gls = require('gulp-live-server');
 
@@ -249,19 +249,26 @@ gulp.task('api:scripts:build', (cb) => {
     pump(tasks, cb);
 });
 
-gulp.task('api:scripts:nodemodules', (cb) => {
-    const tasks = [
-        gulp.src(npmDist(), {
-            base: './node_modules',
-            excludes: [],
-            replaceDefaultExcludes: true,
-            copyUnminified: true
-        }),
-        plumber(),
-        gulp.dest(buildConfig.api.dist.nodeModules)
-    ];
+gulp.task('api:scripts:nodemodules', async () => {
+    // const tasks = [
+    //     gulp.src(npmDist({
+    //         excludes: [],
+    //         replaceDefaultExcludes: true,
+    //         copyUnminified: true
+    //     }), {
+    //             base: './node_modules'
+    //         }),
+    //     plumber(),
+    //     gulp.dest(buildConfig.api.dist.nodeModules)
+    // ];
 
-    pump(tasks, cb);
+    // pump(tasks, cb);
+    copyNodeModules(buildConfig.projectBasePath, buildConfig.api.dist.basePath, { devDependencies: false }, function (err, results) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+    });
 });
 
 gulp.task('api:scripts', (cb) => {
