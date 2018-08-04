@@ -1,4 +1,4 @@
-import update from 'immutability-helper';
+//import update from 'immutability-helper';
 import ProductsEnums from '../enums/products';
 
 const products = (state = {}, action) => {

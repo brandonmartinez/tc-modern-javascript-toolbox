@@ -56,7 +56,7 @@ const sassIncludePaths = [
 const cleanDirectoryFunc = (directory) => {
     return (cb) => {
         const tasks = [
-            gulp.src(buildConfig.web.dist.basePath, {
+            gulp.src(directory, {
                 read: false
             }),
             plumber(),
@@ -69,9 +69,11 @@ const cleanDirectoryFunc = (directory) => {
     };
 };
 
-const lintingFunc = (watchExpression) => {
+const lintingFunc = (watchExpression, cwd) => {
     return () => {
-        var pipeline = gulp.src([watchExpression, '!node_modules/**'])
+        var pipeline = gulp.src([watchExpression, '!node_modules/**'], {
+            cwd: cwd
+        })
             .pipe(plumber())
             .pipe(eslint())
             .pipe(eslint.format());
@@ -161,7 +163,7 @@ gulp.task('web:styles', (cb) => {
     pump(tasks, cb);
 });
 
-gulp.task('web:scripts:lint', lintingFunc(buildConfig.web.scripts.watch));
+gulp.task('web:scripts:lint', lintingFunc(buildConfig.web.scripts.watch, buildConfig.web.scripts.cwd));
 
 gulp.task('web:scripts:build', (cb) => {
     // Setup any values to be dynamically injected into the webpack configuration
@@ -189,7 +191,7 @@ gulp.task('web:scripts', (cb) => {
 });
 
 // _html task cannot run without having assets run first, as a hash needs to be built for cache busting
-gulp.task('web:_html', (cb) => {
+gulp.task('web:html', (cb) => {
     const tasks = [
         gulp.src(buildConfig.web.html.files, {
             cwd: buildConfig.web.html.cwd
@@ -213,17 +215,17 @@ gulp.task('web:watch', function () {
     gulp.watch(buildConfig.web.scripts.watch, {
         cwd: buildConfig.web.scripts.cwd,
         verbose: true
-    }, ['scripts']);
+    }, ['web:scripts']);
 
     gulp.watch(buildConfig.web.styles.watch, {
         cwd: buildConfig.web.styles.cwd,
         verbose: true
-    }, ['styles']);
+    }, ['web:styles']);
 
     gulp.watch(buildConfig.web.images.watch, {
         cwd: buildConfig.web.images.cwd,
         verbose: true
-    }, ['images']);
+    }, ['web:images']);
 });
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -232,7 +234,7 @@ gulp.task('web:watch', function () {
 
 gulp.task('api:clean', cleanDirectoryFunc(buildConfig.api.dist.basePath));
 
-gulp.task('api:scripts:lint', lintingFunc(buildConfig.api.scripts.watch));
+gulp.task('api:scripts:lint', lintingFunc(buildConfig.api.scripts.watch, buildConfig.api.scripts.cwd));
 
 gulp.task('api:scripts:build', (cb) => {
     const tasks = [
@@ -280,11 +282,10 @@ gulp.task('env:prod', function () {
 
 gulp.task('web:build', (cb) => {
     // clean runs first, then all asset steps, then _html (for cachebusting), and finally the cb
-    run('web:clean', ['web:styles', 'web:scripts', 'web:images', 'web:fonts', 'web:rootAssets'], 'web:_html', cb);
+    run('web:clean', ['web:styles', 'web:scripts', 'web:images', 'web:fonts', 'web:rootAssets'], 'web:html', cb);
 });
 
 gulp.task('api:build', (cb) => {
-    // clean runs first, then all asset steps, then _html (for cachebusting), and finally the cb
     run('api:clean', ['api:scripts'], cb);
 });
 
@@ -312,19 +313,8 @@ gulp.task('live-server', function () {
             }
         });
     server.start();
-
-    // //use gulp.watch to trigger server actions(notify, start or stop)
-    // gulp.watch(['static/**/*.css', 'static/**/*.html'], function (file) {
-    //     server.notify.apply(server, [file]);
-    // });
-    // gulp.watch('myapp.js', server.start.bind(server)); //restart my server
-
-    // // Note: try wrapping in a function if getting an error like `TypeError: Bad argument at TypeError (native) at ChildProcess.spawn`
-    // gulp.watch('myapp.js', function () {
-    //     server.start.bind(server)()
-    // });
 });
 
 gulp.task('serve', function () {
-    run('build', ['live-server, watch']);
+    run('build', ['live-server']);
 });
