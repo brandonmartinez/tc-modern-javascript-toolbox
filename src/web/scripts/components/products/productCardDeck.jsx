@@ -19,7 +19,7 @@ const ProductCardDeck = ({ group }) => (
 );
 
 // Todo: fill in proper shape
-Product.propTypes = {
+ProductCardDeck.propTypes = {
     group: PropTypes.object
 };
 

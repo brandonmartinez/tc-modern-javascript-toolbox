@@ -8,8 +8,11 @@ function BuildConfig(environment) {
 
     // Root paths
     const projectBasePath = path.resolve(__dirname, '../'),
+        distBasePath = path.resolve(__dirname, '../.dist/' + environment + '/'),
         webBasePath = path.resolve(__dirname, '../src/web/'),
-        distBasePath = path.resolve(__dirname, '../.dist/' + environment + '/web/'),
+        webDistBasePath = path.resolve(distBasePath, 'web/'),
+        apiBasePath = path.resolve(__dirname, '../src/api/'),
+        apiDistBasePath = path.resolve(distBasePath, 'api/'),
         nodeModulesBasePath = path.resolve(__dirname, '../node_modules/');
 
     // Config
@@ -51,15 +54,25 @@ function BuildConfig(environment) {
                 'file': path.resolve(webBasePath, 'styles/app.scss')
             },
             'dist': {
-                'basePath': distBasePath,
-                'fonts': path.resolve(distBasePath, 'fonts/'),
-                'images': path.resolve(distBasePath, 'images/'),
-                'html': distBasePath,
-                'rootAssets': distBasePath,
-                'scripts': path.resolve(distBasePath, 'app.min.js'),
-                'styles': path.resolve(distBasePath, 'app.min.css')
+                'basePath': webDistBasePath,
+                'fonts': path.resolve(webDistBasePath, 'fonts/'),
+                'images': path.resolve(webDistBasePath, 'images/'),
+                'html': webDistBasePath,
+                'rootAssets': webDistBasePath,
+                'scripts': path.resolve(webDistBasePath, 'app.min.js'),
+                'styles': path.resolve(webDistBasePath, 'app.min.css')
             }
         },
+        'api': {
+            'basePath': apiBasePath,
+            'scripts': {
+                'cwd': apiBasePath,
+                'watch': '**/*.{js,json}'
+            },
+            'dist': {
+                'basePath': apiDistBasePath,
+            }
+        }
     };
 
     return buildConfig;
