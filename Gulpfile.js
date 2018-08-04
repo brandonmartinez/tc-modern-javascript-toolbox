@@ -92,7 +92,8 @@ const watchDirectory = (watchPattern, cwd, onChangeFunc) => {
     return () => {
         watch(watchPattern, {
             cwd: cwd,
-            ignoreInitial: true
+            ignoreInitial: true,
+            verbose: true
         }).on('change', onChangeFunc);
     }
 };
@@ -355,13 +356,14 @@ gulp.task('live-server', function () {
             env: {
                 NODE_ENV: environment
             }
-        });
-    server.start();
+        }, 35729);
+
+        server.start();
 
     // Watch for any .dist files changing, this means we need to reload
-    console.log('Watching', buildConfig.api.dist.basePath);
-    const serverWatcher = watchDirectory('**/*', buildConfig.distBasePath, (file) => server.notify.apply(server, [file]));
-    serverWatcher();
+    gulp.watch(['**/*'], {cwd: buildConfig.web.dist.basePath}, function (file) {
+        server.notify.apply(server, [file]);
+      });
 });
 
 gulp.task('serve', function (cb) {
