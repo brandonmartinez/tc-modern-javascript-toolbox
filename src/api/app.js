@@ -10,11 +10,11 @@ import ProductRoutes from './routes/ProductRoutes';
 // Configuration
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// Allow the webDirectory to be specified, otherwise we assume that it's going to be in the dist development directory
-var webDirectory = process.env.WEB_DIRECTORY || join(__dirname, '../web/');
+// Set the web directory (allow override for dev) or use local public
+var webDirectory = process.env.WEB_DIRECTORY || join(__dirname, './public/');
 
-// Allow a port to be set, otherwise assume 3000 for local dev purposes
-var portNumber = process.env.PORT || 3000;
+// Allow a port to be set, otherwise assume 80 for production purposes
+var portNumber = process.env.PORT || 80;
 
 // Create the Web App
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -30,8 +30,8 @@ app.use(urlencoded({
 
 app.use(json());
 
- // Static Site
- //////////////////////////////////
+// Static Site
+//////////////////////////////////
 app.use('/', express.static(webDirectory));
 
 // API Routes

@@ -24,16 +24,6 @@ module.exports = (buildConfig) => {
             }]
         },
         plugins: [
-            new webpack.SourceMapDevToolPlugin({
-                filename: '[name].min.js.map',
-                moduleFilenameTemplate: info => {
-                    let sanitizedPath = info.resourcePath
-                        .replace(/\\/ig, '/')
-                        .replace('src/scripts', 'scripts');
-
-                    return sanitizedPath;
-                },
-            }),
             new webpack.ProvidePlugin({}),
             new webpack.DefinePlugin({
                 IS_DEVELOPMENT: buildConfig.environment !== 'production'

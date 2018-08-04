@@ -1,20 +1,13 @@
 'use strict';
 
 ////////////////////////////////////////////////////////////////////////////////////
-// configuration
-////////////////////////////////////////////////////////////////////////////////////
-const DEV_ENV = 'development';
-const PROD_ENV = 'production';
-let environment = DEV_ENV;
-const onMac = process.platform === 'darwin';
-
-////////////////////////////////////////////////////////////////////////////////////
 // dependencies
 ////////////////////////////////////////////////////////////////////////////////////
 
 // Config
+const environment = process.env.NODE_ENV || 'development';
 const BuildConfig = require('./config/Build.js');
-const buildConfig = BuildConfig(environment);
+let buildConfig = BuildConfig(environment);
 
 // Gulp
 const gulp = require('gulp');
@@ -80,7 +73,7 @@ const lintingFunc = (watchExpression, cwd) => {
             .pipe(eslint())
             .pipe(eslint.format());
 
-        if (environment === PROD_ENV) {
+        if (environment === 'production') {
             pipeline = pipeline.pipe(eslint.failAfterError());
         }
 
@@ -182,7 +175,7 @@ gulp.task('web:scripts:build', (cb) => {
     /////////////////////////////////////////////////////////////////////////////////////
 
     // Create the webpack script, injecting any parameters
-    const webpackScript = require('./webpack.js')(buildConfig);
+    const webpackScript = require('./webpack.' + environment + '.js')(buildConfig);
 
     // Run gulp tasks
     /////////////////////////////////////////////////////////////////////////////////////
@@ -317,8 +310,10 @@ gulp.task('api:watch', ['api:watch:scripts']);
 // other tasks
 ////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('env:prod', async () => {
-    environment = PROD_ENV;
+gulp.task('env:production', async () => {
+    process.env.NODE_ENV = 'production';
+    // reload config since our default is dev
+    buildConfig = BuildConfig(process.env.NODE_ENV);
 });
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -336,29 +331,29 @@ gulp.task('api:build', (cb) => {
 
 gulp.task('build', ['web:build', 'api:build']);
 
-gulp.task('build:dev', ['build']);
+gulp.task('build:development', ['build']);
 
-gulp.task('build:prod', (cb) => {
-    run('env:prod', 'build', cb);
+gulp.task('build:production', (cb) => {
+    run('env:production', 'build', cb);
 });
 
-gulp.task('default', ['build:dev']);
+gulp.task('default', ['build:production']);
 
 ////////////////////////////////////////////////////////////////////////////////////
 // local dev tasks
 ////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('live-server', function () {
-    const server = gls.new(
-        ['--harmony', buildConfig.api.dist.basePath + '/app.js'],
-        {
-            cwd: buildConfig.api.dist.basePath,
-            env: {
-                NODE_ENV: environment
-            }
-        }, 35729);
+    process.env.WEB_DIRECTORY = buildConfig.web.dist.basePath;
+    process.env.PORT = 3000;
 
-        server.start();
+    const serverOptions = {
+        cwd: buildConfig.api.dist.basePath
+    };
+    serverOptions.env = process.env;
+
+    const server = gls(['--harmony', buildConfig.api.dist.basePath + '/app.js'], serverOptions, 35729);
+    server.start();
 
     // Watch for any .dist files changing, this means we need to reload
     gulp.watch(['**/*'], {cwd: buildConfig.web.dist.basePath}, function (file) {

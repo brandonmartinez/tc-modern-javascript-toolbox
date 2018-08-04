@@ -10,9 +10,11 @@ function BuildConfig(environment) {
     const projectBasePath = path.resolve(__dirname, '../'),
         distBasePath = path.resolve(__dirname, '../.dist/' + environment + '/'),
         webBasePath = path.resolve(__dirname, '../src/web/'),
-        webDistBasePath = path.resolve(distBasePath, 'web/'),
+        // If production, we're going to treat it like a "public" directory
+        webDistBasePath = path.resolve(distBasePath, (environment === 'production')? 'public/' : 'web/'),
         apiBasePath = path.resolve(__dirname, '../src/api/'),
-        apiDistBasePath = path.resolve(distBasePath, 'api/'),
+        // If production, we're using the "api" as the base of the application
+        apiDistBasePath = path.resolve(distBasePath, (environment === 'production')? '' : 'api/'),
         nodeModulesBasePath = path.resolve(__dirname, '../node_modules/');
 
     // Config
@@ -77,7 +79,7 @@ function BuildConfig(environment) {
             }
         }
     };
-
+    
     return buildConfig;
 }
 
