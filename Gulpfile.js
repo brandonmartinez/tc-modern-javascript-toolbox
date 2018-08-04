@@ -91,7 +91,7 @@ const watchDirectory = (watchPattern, cwd, onChangeFunc) => {
     return () => {
         watch(watchPattern, {
             cwd: cwd,
-            verbose: true,
+            ignoreInitial: true
         }).on('change', onChangeFunc);
     }
 };
@@ -297,13 +297,16 @@ gulp.task(
 
 gulp.task('web:watch', ['web:watch:scripts', 'web:watch:styles', 'web:watch:images', 'web:watch:html']);
 
-gulp.task('api:watch', function () {
-    gulp.watch(buildConfig.api.scripts.watch, {
-        cwd: buildConfig.api.scripts.cwd,
-        ignoreInitial: true,
-        verbose: true
-    }, ['api:scripts:lint', 'api:scripts:build']).pipe(plumber());
-});
+gulp.task(
+    'api:watch:scripts',
+    watchDirectory(
+        buildConfig.api.scripts.watch,
+        buildConfig.api.scripts.cwd,
+        () => run('api:scripts:build')
+    )
+);
+
+gulp.task('api:watch', ['api:watch:scripts']);
 
 ////////////////////////////////////////////////////////////////////////////////////
 // other tasks
@@ -353,16 +356,8 @@ gulp.task('live-server', function () {
 
     // Watch for any .dist files changing, this means we need to reload
     console.log('Watching', buildConfig.api.dist.basePath);
-    gulp.watch(
-        ['**/*'],
-        {
-            cwd: buildConfig.distBasePath,
-            verbose: true,
-        },
-        (file) => {
-            server.notify.apply(server, [file]);
-        }
-    );
+    const serverWatcher = watchDirectory('**/*', buildConfig.distBasePath, (file) => server.notify.apply(server, [file]));
+    serverWatcher();
 });
 
 gulp.task('serve', function (cb) {
