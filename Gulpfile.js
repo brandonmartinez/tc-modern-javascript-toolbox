@@ -306,14 +306,25 @@ gulp.task(
 
 gulp.task('api:watch', ['api:watch:scripts']);
 
+
+
 ////////////////////////////////////////////////////////////////////////////////////
-// other tasks
+// additional production tasks
 ////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('env:production', async () => {
     process.env.NODE_ENV = 'production';
     // reload config since our default is dev
     buildConfig = BuildConfig(process.env.NODE_ENV);
+});
+
+gulp.task('env:production:iis', (cb) => {
+    const tasks = [
+        gulp.src(buildConfig.production.webConfig),
+        gulp.dest(buildConfig.production.dist.webConfig)
+    ];
+
+    pump(tasks, cb);
 });
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -334,7 +345,7 @@ gulp.task('build', ['web:build', 'api:build']);
 gulp.task('build:development', ['build']);
 
 gulp.task('build:production', (cb) => {
-    run('env:production', 'build', cb);
+    run('env:production', ['build', 'env:production:iis'], cb);
 });
 
 gulp.task('default', ['build:production']);
