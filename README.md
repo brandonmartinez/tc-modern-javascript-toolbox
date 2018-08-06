@@ -29,6 +29,14 @@ To participate in the session, you will need to following:
 * A [Github](https://www.github.com/) or other source repository account
 * Fingers at the ready for the JavaScript to flow!
 
+## Running the App
+
+If you're pulling this repo after the session, you can do the following commands from the root of the repository to run the application:
+
+1. If you don't have the gulp-cli installed, use this command: `sudo npm install -g gulp-cli`
+2. In the root of the application, run `npm install`
+3. You can then kick off a development session with `gulp serve`
+
 ## Agenda
 
 ### Part 1: Introduction and a History Lesson
